@@ -1,0 +1,166 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Good API
+    version: 0.0.1
+paths:
+    /good:
+        put:
+            tags:
+                - Good
+            operationId: Good_UpdateGood
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.valuation.UpdateGoodsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.valuation.UpdateGoodsReply'
+        post:
+            tags:
+                - Good
+            operationId: Good_CreateGood
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.valuation.CreateGoodsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.valuation.CreateGoodsReply'
+    /good/list:
+        get:
+            tags:
+                - Good
+            operationId: Good_ListGoods
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.valuation.ListGoodsReply'
+    /good/list/{words}:
+        get:
+            tags:
+                - Good
+            operationId: Good_ListGoodsByWords
+            parameters:
+                - name: words
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.valuation.ListGoodsReply'
+    /good/{id}:
+        get:
+            tags:
+                - Good
+            operationId: Good_GetGood
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.valuation.GetGoodsReply'
+        delete:
+            tags:
+                - Good
+            operationId: Good_DeleteGood
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.valuation.DeleteGoodsReply'
+components:
+    schemas:
+        api.valuation.CreateGoodsReply:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint64
+        api.valuation.CreateGoodsRequest:
+            type: object
+            properties:
+                good:
+                    $ref: '#/components/schemas/api.valuation.GoodInfo'
+        api.valuation.DeleteGoodsReply:
+            type: object
+            properties: {}
+        api.valuation.GetGoodsReply:
+            type: object
+            properties: {}
+        api.valuation.GoodInfo:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint64
+                name:
+                    type: string
+                type:
+                    type: string
+                unit:
+                    type: string
+                price:
+                    type: number
+                    format: float
+                tariff:
+                    type: number
+                    format: float
+                alias:
+                    type: string
+        api.valuation.ListGoodsReply:
+            type: object
+            properties:
+                goods:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.valuation.GoodInfo'
+        api.valuation.UpdateGoodsReply:
+            type: object
+            properties: {}
+        api.valuation.UpdateGoodsRequest:
+            type: object
+            properties:
+                good:
+                    $ref: '#/components/schemas/api.valuation.GoodInfo'
+tags:
+    - name: Good

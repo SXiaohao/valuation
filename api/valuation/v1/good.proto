@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package api.valuation;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "valuation/api/valuation;valuation";
+
+
+service Good {
+  rpc CreateGood (CreateGoodsRequest) returns (CreateGoodsReply) {
+    option (google.api.http) = {
+      post: "/good",
+      body: "*",
+    };
+  }
+
+  rpc UpdateGood (UpdateGoodsRequest) returns (UpdateGoodsReply){
+    option (google.api.http) = {
+      put: "/good",
+      body: "*",
+    };
+  };
+  rpc DeleteGood (DeleteGoodsRequest) returns (DeleteGoodsReply){
+    option (google.api.http) = {
+      delete: "/good/{id}",
+    };
+  };
+  rpc GetGood (GetGoodsRequest) returns (GetGoodsReply){
+    option (google.api.http) = {
+      get: "/good/{id}",
+    };
+  };
+  rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply){
+    option (google.api.http) = {
+      get: "/good/list",
+    };
+  };
+  rpc ListGoodsByWords (ListGoodsByWordsRequest) returns (ListGoodsReply){
+    option (google.api.http) = {
+      get: "/good/list/{words}",
+    };
+  };
+}
+
+message GoodInfo{
+  uint64 id = 1 [(validate.rules).uint64 = {ignore_empty: true,gt:0}];
+  string name = 2 [(validate.rules).string = {min_len: 1, max_len: 20}];
+  string type = 3 [(validate.rules).string = {min_len: 1, max_len: 10}];
+  string unit = 4 [(validate.rules).string = {min_len: 1, max_len: 10}];
+  float price = 5 [(validate.rules).float = {gte:0}];
+  float tariff = 6 [(validate.rules).float = {gte:0}];
+  string alias = 7 [(validate.rules).string = {ignore_empty: true, min_len:1}];
+}
+
+message CreateGoodsRequest {
+  GoodInfo good = 1;
+}
+message CreateGoodsReply {
+  uint64 id = 1;
+}
+
+message UpdateGoodsRequest {
+  GoodInfo good = 1;
+}
+message UpdateGoodsReply {
+}
+
+message DeleteGoodsRequest {
+  uint64 id = 1;
+}
+message DeleteGoodsReply {
+}
+
+message GetGoodsRequest {
+  uint64 id = 1;
+}
+message GetGoodsReply {
+}
+
+message ListGoodsRequest {
+}
+
+message ListGoodsReply {
+  repeated GoodInfo goods = 1;
+}
+
+message ListGoodsByWordsRequest {
+  string words = 1;
+}
