@@ -1,37 +1,6 @@
-#FROM golang:1.16 AS builder
-#
-#COPY . /src
-#WORKDIR /src
-#
-#RUN GOPROXY=https://goproxy.cn make build
-#
-#FROM debian:stable-slim
-#
-#RUN apt-get update && apt-get install -y --no-install-recommends \
-#		ca-certificates  \
-#        netbase \
-#        && rm -rf /var/lib/apt/lists/ \
-#        && apt-get autoremove -y && apt-get autoclean -y
-#
-#COPY --from=builder /src/bin /app
-#COPY --from=builder /src/configs/config.yaml /app
-#WORKDIR /app
-#
-#EXPOSE 8000
-#EXPOSE 9000
-#
-#CMD ["./valuation", "-conf", "./config.yaml"]
-FROM golang:alpine3.15 AS builder
-
-COPY . /src
-WORKDIR /src
-RUN apk add gcc g++ make cmake gfortran libffi-dev openssl-dev libtool
-RUN GOPROXY=https://goproxy.cn make build
-
-FROM alpine:latest
-COPY --from=builder /src/bin /app
-COPY --from=builder /src/configs/config.yaml /app
-WORKDIR /app
-
-
-CMD ["./valuation", "-conf", "./config.yaml"]
+FROM rabbitmq:alpine
+RUN apk update && apk add wget
+RUN wget -P /plugins https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/3.10.2/rabbitmq_delayed_message_exchange-3.10.2.ez
+RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_federation_management rabbitmq_stomp rabbitmq_delayed_message_exchange
+EXPOSE 5672
+EXPOSE 15672
